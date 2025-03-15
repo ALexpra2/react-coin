@@ -10,12 +10,13 @@ function Home() {
     const fetchHome = async () => {
       try {
         const response = await fetch(`https://api.coincap.io/v2/assets/`);
-        if (!response.ok) throw new Error(`Error: ${response.status}`);
+        if (!response.ok) throw new Error(`Error getting the data, Please reload`);
         const data = await response.json();
-        setCoinHome(data.data); 
+        setCoinHome(data.data);
+        setError(null)
       } catch (err) {
-        setError(err.message);
         setCoinHome([]); 
+        setError(err.message);
       }
     };
     fetchHome();

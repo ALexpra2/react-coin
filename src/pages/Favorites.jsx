@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 
+
+//! Falta arreglar funcion fetchAllCoins, esta haciendo muchas peticiones a la api y tira error a veces
+
 const Favorites = () => {
     const [favorites, setFavorites] = useState(() => {
         const storedFavorites = localStorage.getItem('cryptoID');
@@ -33,8 +36,8 @@ const Favorites = () => {
     const fetchAllCoins = async () => {
         try {
             const coinsData = await Promise.all(favorites.map(id => fetchCoin(id)));
-            console.log(coinsData)
-            setCoinData(coinsData);  
+            const validCoins = coinsData.filter(coin => coin !== undefined);
+            setCoinData(validCoins);
         } catch (err) {
             console.error("Error fetching all coins:", err);
         }
@@ -43,6 +46,14 @@ const Favorites = () => {
     useEffect(() => {
         fetchAllCoins();
     }, [favorites]); 
+
+    const handleEliminate = (index) => {
+        const updatedFavorites = [...favorites]
+        updatedFavorites.splice(index, 1);
+        
+        localStorage.setItem('cryptoID', JSON.stringify(updatedFavorites));
+        setFavorites(updatedFavorites);
+    };
 
     return (
     <>
@@ -65,7 +76,7 @@ const Favorites = () => {
                     Explorer
                     </a>
                 </li>
-                <button>Eliminar de Favoritos</button>
+                <button onClick={() => handleEliminate(index)}>Eliminar de Favoritos</button>
             </ul>
       </div>
     ))}
@@ -73,6 +84,5 @@ const Favorites = () => {
     </>
     );
 }
-// funcion para buscar en local storage y eliminar
 
 export default Favorites; 

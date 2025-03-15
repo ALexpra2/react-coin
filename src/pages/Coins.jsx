@@ -43,7 +43,8 @@ function Coins() {
     const savedFavorites = JSON.parse(localStorage.getItem('cryptoID')) || [];
     if (!savedFavorites.includes(id)) {
       savedFavorites.push(id);
-      localStorage.setItem('cryptoID', JSON.stringify(savedFavorites));
+      localStorage.setItem('cryptoID', JSON.stringify(savedFavorites))
+      alert("Item added successfully!");
     }
   };
   
