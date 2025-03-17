@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
 
-
-//! Falta arreglar funcion fetchAllCoins, esta haciendo muchas peticiones a la api y tira error a veces
-
 const Favorites = () => {
     const [favorites, setFavorites] = useState(() => {
         const storedFavorites = localStorage.getItem('cryptoID');
@@ -34,17 +31,18 @@ const Favorites = () => {
     };
 
     const fetchAllCoins = async () => {
-        try {
-            const coinsData = await Promise.all(favorites.map(id => fetchCoin(id)));
-            const validCoins = coinsData.filter(coin => coin !== undefined);
-            setCoinData(validCoins);
-        } catch (err) {
-            console.error("Error fetching all coins:", err);
+        setCoinData([]);
+        for (let i = 0; i < favorites.length; i++) {
+            await new Promise(resolve => setTimeout(resolve, 1000)); 
+            const coin = await fetchCoin(favorites[i]);
+            if (coin) setCoinData(prevData => [...prevData, coin]);
         }
     };
 
     useEffect(() => {
         fetchAllCoins();
+        console.log(favorites)
+        console.log(localStorage)
     }, [favorites]); 
 
     const handleEliminate = (index) => {

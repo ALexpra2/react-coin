@@ -14,6 +14,7 @@ function Coins() {
       setLoading(true);
       setError(null);
       try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         const response = await fetch(`https://api.coincap.io/v2/assets/${id}`);
         if (!response.ok) throw new Error(`Error:${response.status}`);
         const data = await response.json();
