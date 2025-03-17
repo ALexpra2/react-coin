@@ -10,9 +10,11 @@ const Favorites = () => {
 
     const fetchCoin = async (id) => {
         try {
+
           const response = await fetch(`https://api.coincap.io/v2/assets/${id}`);
           if (!response.ok) throw new Error(`Error:${response.status}`);
           const data = await response.json();
+          
           return {
             name: data.data.name,
             symbol: data.data.symbol,
